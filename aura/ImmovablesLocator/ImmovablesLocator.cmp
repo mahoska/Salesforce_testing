@@ -1,0 +1,10 @@
+<aura:component implements="force:appHostable">
+    <div>
+        <div class="map">
+            <c:ImmMap />
+        </div>
+        <div class="list">
+            <c:ImmList />  
+        </div>
+    </div>
+</aura:component>

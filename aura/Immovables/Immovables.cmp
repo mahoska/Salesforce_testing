@@ -1,0 +1,50 @@
+<aura:component implements="force:appHostable">
+     <aura:attribute name="immovablesItem" type="Immovables__c"/>
+
+    <tr>
+        <th scope="row" data-label="Immovables Id">
+        	<div class="slds-truncate" title="">
+                <a href="{!'/one/one.app?#/sObject/'+ v.immovablesItem.Id + '/view'}">{!v.immovablesItem.Name}</a>
+            </div>
+        </th>
+        <td data-label="Immovables type">
+        	<div class="slds-truncate" title="">{!v.immovablesItem.Type__c}</div>
+        </td>
+        <td data-label="Full address" >
+        	<div class="slds-truncate" title=""  style="max-width:200px">
+                {!v.immovablesItem.Full_address__c}
+            </div>
+        </td>
+         <td data-label="Total area">
+        	<div class="slds-truncate" title="">{!v.immovablesItem.Total_area__c}</div>
+        </td>
+        <td data-label="Initial cost">
+        	<div class="slds-truncate" title="">{!v.immovablesItem.Initial_cost__c}</div>
+        </td>
+        <td data-label="Seller fullname">
+        	<div class="slds-truncate" title="">
+                 <a href="{!'/one/one.app?#/sObject/'+ v.immovablesItem.Seller__r.Id + '/view'}">
+                {!v.immovablesItem.Seller__r.First_Name__c}<br/>  {!v.immovablesItem.Seller__r.Last_Name__c}
+                </a>
+            </div>
+        </td>
+         <td data-label="Seller contact phone">
+             <div class="slds-truncate" title="">{!v.immovablesItem.Seller__r.Contact_Phone__c}</div>
+        </td>
+        <td data-label="Status">
+        	<div class="slds-truncate" title="">
+                <aura:if isTrue="{!v.immovablesItem.Status__c=='the sale is temporarily suspended'}">
+                    suspended
+                    <aura:set attribute="else">
+                            {!v.immovablesItem.Status__c}
+                    </aura:set>
+                </aura:if>
+            </div>
+        </td>
+         <td data-label="Actions" >
+        	<div title="" >
+                <c:MenuImmovablesItemAction immovablesItem="{!v.immovablesItem}"/>
+            </div>
+        </td>
+        </tr>
+</aura:component>

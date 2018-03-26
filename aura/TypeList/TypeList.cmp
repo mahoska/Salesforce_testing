@@ -1,0 +1,25 @@
+<aura:component controller="ImmovablesController">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!--регистрация события name -  по нему мы обращаемся в контроллере
+							type - должен совпадать с именем эвента-->
+    <aura:registerEvent name="updateTypeEvent" type="c:updateTypeImm"/>
+    
+    <aura:attribute name="typesImmovables" type="AggregateResult[]"/>
+    
+    <aura:attribute name="selectedType" type="String" />
+    <aura:handler name="change" value="{!v.selectedType}" action="{!c.selectType}"/>
+    
+ 
+        	<lightning:select aura:id="select" name="select" label=""  value="{!v.selectedType}">
+            	<option value="all">all</option>
+                <aura:iteration items="{!v.typesImmovables}" var="immovablesType">
+                    <option value="{!immovablesType.Type__c}">
+                        {!immovablesType.Type__c}
+                    </option>
+               </aura:iteration>   
+
+            </lightning:select>
+
+
+</aura:component>

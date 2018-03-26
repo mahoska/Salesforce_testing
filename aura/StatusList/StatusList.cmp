@@ -1,0 +1,24 @@
+<aura:component controller="ImmovablesController">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!--регистрация события name -  по нему мы обращаемся в контроллере
+							type - должен совпадать с именем эвента-->
+    <aura:registerEvent name="updateStatusEvent" type="c:updateStatusImm"/>
+    
+    <aura:attribute name="statusItem" type="AggregateResult[]"/>
+    
+    <aura:attribute name="selectedStatusItem" type="String" default='all' />
+    
+    <aura:handler name="change" value="{!v.selectedStatusItem}" action="{!c.selectStatus}"/>
+    		
+        	<lightning:select aura:id="select" name="select" label=""  value="{!v.selectedStatusItem}">
+                <aura:iteration items="{!v.statusItem}" var="item">
+                    <option value="{!item.Status__c}">
+                        {!item.Status__c}
+                    </option>
+               </aura:iteration>   
+
+            </lightning:select>
+ 
+
+</aura:component>

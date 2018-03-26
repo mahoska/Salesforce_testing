@@ -1,0 +1,12 @@
+<aura:component controller="ImmovablesController">
+    <aura:attribute name="immovables" type="Immovables__c[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:registerEvent name="immLoaded" type="c:ImmLoadedLoc"/>
+    
+    <ul>
+    <aura:iteration items="{!v.immovables}" var="itemImm">
+        <c:ImmListItem immovablesItem="{!itemImm}"/>
+    </aura:iteration>
+    </ul>
+</aura:component>

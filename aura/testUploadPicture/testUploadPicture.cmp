@@ -1,0 +1,36 @@
+<aura:component controller='FileUploadController'
+                implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+     <aura:attribute name="fileToBeUploaded" type="Object[]"/>
+     <aura:attribute name="images" type="Attachment[]"/>
+    
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <article class="slds-card">
+       <div class="slds-card__header slds-grid">  
+
+    
+    <div class=" slds-box">
+        <div class="slds-grid slds-wrap">
+            <lightning:input aura:id="file-input" type="file"
+                             files="{!v.fileToBeUploaded}"
+                             onchange="{!c.onFileUploaded}"
+                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                             label="Attachment"
+                             name="file" multiple="true"/>
+        </div>
+    </div>
+	<div>
+    
+   
+         <a href="{!'/one/one.app#/sObject/ContentDocument/0691r000002y1BEAAY'}">Img
+      	
+	
+        </a>
+           </div>
+        </div>
+    <div>
+        Test
+    </div>
+     
+    </article>
+</aura:component>

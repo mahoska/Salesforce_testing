@@ -1,0 +1,18 @@
+<aura:component controller="ImmovablesController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName" >
+ <aura:attribute name="actions" type="Map[]"/>  
+ <aura:attribute name="immovablesItem" type="Immovables__c"/>
+
+ <aura:handler name="init" value="{!this}" action="{!c.createItems}" />
+
+ <!--aura:dependency resource="markup://force:editRecord" type="EVENT" /-->
+ <!--aura:handler name="handleEdit" event="force:editRecord" action="{!c.test}" /-->
+    
+ <aura:registerEvent name="openOffers" type="c:openOfferWin"/>   
+
+	 <lightning:buttonMenu alternativeText="Actions" iconName="utility:settings" onselect="{!c.handleMenuSelect }" >
+         <aura:iteration var="action" items="{!v.actions }" >
+            <lightning:menuItem aura:id="actionMenuItems" label="{!action.label }" value="{!action.value }" />
+        </aura:iteration>
+    </lightning:buttonMenu>
+
+</aura:component>

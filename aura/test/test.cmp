@@ -1,0 +1,24 @@
+<aura:component controller="editRecordSimulationController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:dependency resource="markup://force:editRecord" type="EVENT" />
+    
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+
+
+    
+    <aura:attribute name="recordId" type="string" />
+    <aura:attribute name="accType" type="String" />
+    <aura:attribute name="accObj" type="account" default="{ sObjectType: 'Account'}"/>
+    
+    
+    <ui:inputText label="Record Id" value="{!v.recordId}" required="true"/>
+	<ui:button class="btn" label="Submit" press="{!c.setOutput}"/>
+    
+    <br />
+    <br />
+    <br />
+    Account Type: <ui:outputText value="{!v.accObj.Type}" />
+</aura:component>

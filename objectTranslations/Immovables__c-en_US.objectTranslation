@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Immovables</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Immovables</value>
+    </caseValues>
+    <fields>
+        <label><!-- Additional structures --></label>
+        <name>Additional_structures__c</name>
+        <picklistValues>
+            <masterLabel>garage</masterLabel>
+            <translation><!-- garage --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>household building</masterLabel>
+            <translation><!-- household building --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Application date --></label>
+        <name>Application_date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Broker --></label>
+        <name>Broker__c</name>
+        <relationshipLabel><!-- Immovables --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Description --></label>
+        <name>Description__c</name>
+    </fields>
+    <fields>
+        <label><!-- Floor --></label>
+        <name>Floor__c</name>
+    </fields>
+    <fields>
+        <label><!-- Full address --></label>
+        <name>Full_address__c</name>
+    </fields>
+    <fields>
+        <label><!-- Image --></label>
+        <name>Image__c</name>
+    </fields>
+    <fields>
+        <label><!-- Initial cost --></label>
+        <name>Initial_cost__c</name>
+    </fields>
+    <fields>
+        <label><!-- Living space --></label>
+        <name>Living_space__c</name>
+    </fields>
+    <fields>
+        <label><!-- Location --></label>
+        <name>Location__c</name>
+    </fields>
+    <fields>
+        <label><!-- Мinimum cost --></label>
+        <name>Minimum_cost__c</name>
+    </fields>
+    <fields>
+        <label><!-- Number of bathrooms --></label>
+        <name>Number_of_bathrooms__c</name>
+    </fields>
+    <fields>
+        <label><!-- Number of floors in the house --></label>
+        <name>Number_of_floors_in_the_house__c</name>
+    </fields>
+    <fields>
+        <label><!-- Number of rooms --></label>
+        <name>Number_of_rooms__c</name>
+    </fields>
+    <fields>
+        <label><!-- Picture --></label>
+        <name>Picture__c</name>
+    </fields>
+    <fields>
+        <label><!-- Seller --></label>
+        <name>Seller__c</name>
+        <relationshipLabel><!-- Immovables --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- the size of the land plot in acres --></help>
+        <label><!-- Size of the land plot --></label>
+        <name>Size_of_the_land_plot__c</name>
+    </fields>
+    <fields>
+        <label><!-- State --></label>
+        <name>State__c</name>
+        <picklistValues>
+            <masterLabel>after the builders</masterLabel>
+            <translation><!-- after the builders --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>premium</masterLabel>
+            <translation><!-- premium --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>requires repair</masterLabel>
+            <translation><!-- requires repair --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>residential</masterLabel>
+            <translation><!-- residential --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Status --></label>
+        <name>Status__c</name>
+        <picklistValues>
+            <masterLabel>available</masterLabel>
+            <translation><!-- available --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>sales</masterLabel>
+            <translation><!-- sales --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>the sale is temporarily suspended</masterLabel>
+            <translation><!-- the sale is temporarily suspended --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Street address --></label>
+        <name>Street_address__c</name>
+    </fields>
+    <fields>
+        <label><!-- Total area --></label>
+        <name>Total_area__c</name>
+    </fields>
+    <fields>
+        <label><!-- Town --></label>
+        <name>Town__c</name>
+    </fields>
+    <fields>
+        <label><!-- Type --></label>
+        <name>Type__c</name>
+        <picklistValues>
+            <masterLabel>Flat</masterLabel>
+            <translation><!-- Flat --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>House</masterLabel>
+            <translation><!-- House --></translation>
+        </picklistValues>
+    </fields>
+    <layouts>
+        <layout>immovables Layout</layout>
+        <sections>
+            <label><!-- Address --></label>
+            <section>Address</section>
+        </sections>
+        <sections>
+            <label><!-- Broker --></label>
+            <section>Broker</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Description &amp; Seller --></label>
+            <section>Description &amp; Seller</section>
+        </sections>
+        <sections>
+            <label><!-- Image --></label>
+            <section>Image</section>
+        </sections>
+        <sections>
+            <label><!-- Price range --></label>
+            <section>Price range</section>
+        </sections>
+        <sections>
+            <label><!-- Status --></label>
+            <section>Status</section>
+        </sections>
+        <sections>
+            <label><!-- Total info --></label>
+            <section>Total info</section>
+        </sections>
+        <sections>
+            <label><!-- Type --></label>
+            <section>Type</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>immovablesLayoutHouse</layout>
+        <sections>
+            <label><!-- Address --></label>
+            <section>Address</section>
+        </sections>
+        <sections>
+            <label><!-- Broker --></label>
+            <section>Broker</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Description &amp; Seller --></label>
+            <section>Description &amp; Seller</section>
+        </sections>
+        <sections>
+            <label><!-- Image --></label>
+            <section>Image</section>
+        </sections>
+        <sections>
+            <label><!-- Price range --></label>
+            <section>Price range</section>
+        </sections>
+        <sections>
+            <label><!-- Status --></label>
+            <section>Status</section>
+        </sections>
+        <sections>
+            <label><!-- Total info --></label>
+            <section>Total info</section>
+        </sections>
+        <sections>
+            <label><!-- Type --></label>
+            <section>Type</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <label><!-- Flat Type --></label>
+        <name>Flat_Type</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- House Type --></label>
+        <name>House_Type</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- check the value of the area --></errorMessage>
+        <name>AreaCheck</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- the cost must be a positive number --></errorMessage>
+        <name>CostCheck</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- date has not yet come --></errorMessage>
+        <name>DateRule</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- specify the number of storeys correctly --></errorMessage>
+        <name>FloorCheck</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Minimum cost should not exceed Initial cost --></errorMessage>
+        <name>MinCostRule</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Number of bathrooms or rooms must must be a positive number --></errorMessage>
+        <name>NumberRoom</name>
+    </validationRules>
+</CustomObjectTranslation>

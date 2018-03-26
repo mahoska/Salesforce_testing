@@ -1,0 +1,7 @@
+<aura:component >
+    <aura:attribute name="immovablesItem" type="Immovables__c"/>
+    
+    <aura:registerEvent name="immSelected" type="c:ImmSelectedLoc"/>
+    
+    <li><a onclick="{!c.immSelected}">{!v.immovablesItem.Name}&nbsp;({!v.immovablesItem.Full_address__c})</a></li>
+</aura:component>

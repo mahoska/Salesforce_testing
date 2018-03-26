@@ -1,0 +1,12 @@
+.THIS {
+    position:absolute;
+    height: 100%;
+    width: 100%;
+}
+.THIS .map {
+    height: 65%;
+}
+
+.THIS .list {
+    height: 35%;
+}

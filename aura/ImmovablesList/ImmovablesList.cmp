@@ -1,0 +1,274 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes"
+                access="global"     controller="ImmovablesController">
+    
+    <aura:attribute name="immovables" type="Immovables__c[]"/>
+    <aura:attribute name="sortArea" type="Boolean" default="false" />
+    <aura:attribute name="searchStr" type="String" default=""/>
+    
+    <aura:attribute name="selectedTypeImm" type="String" default="all"/>
+    <aura:attribute name="selectedStatusImm" type="String" default="available"/>
+    <aura:attribute name="selectedCreateAction" type="String" />
+    
+    <!--for record type-->
+    <aura:attribute name="lstOfRecordType" type="String[]" />
+    <aura:attribute name="isOpen" type="boolean" default="false" />
+    
+    <!--modal for offer-->
+    <aura:attribute name="isOpenOffer" type="boolean" default="false"/>  
+    <aura:attribute name="offers" type="Offer__c[]" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.selectedTypeImm}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.selectedStatusImm}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.sortArea}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.searchStr}" action="{!c.doInit}"/>
+    
+    <aura:handler name="change" value="{!v.selectedCreateAction}" action="{!c.createAction}"/>
+    
+    <!--ловим событие name -  совпадает с именем в регестрации
+       event - должен совпадать с именем эвента-->
+    <aura:handler name="updateTypeEvent" event="c:updateTypeImm"
+                  action="{!c.handleupdateTypeEvent}"/>
+    
+    <aura:handler name="updateStatusEvent" event="c:updateStatusImm"
+                  action="{!c.handleupdateStatusEvent}"/>
+    
+    
+	 <aura:handler name="openOffers" event="c:openOfferWin"
+                  action="{!c.handleOpenOffers}"/>    
+    
+    
+    <div class="slds-grid ">
+        <div class="slds-col slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+            <article class="slds-card">
+                <div class="slds-card__header slds-grid">
+                        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-contact" title="description of icon when needed">
+                                    <lightning:icon iconName="standard:scan_card" alternativeText="My Immovables"/>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <h2>
+                                    <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="[object Object]">
+                                        <span class="slds-text-heading_small">Сurrent Offers ({!v.immovables.length})</span>
+                                    </a>
+                                </h2>
+                            </div>
+                        </header>
+                        <div class="slds-no-flex">
+                            <div class="slds-button-group" role="group">
+                                <div class="slds-m-right_medium">
+                                    <div class="custom-class" >
+                                        <lightning:button variant="brand" label="Refresh" onclick="{! c.refresh }" class='ref-btn'/>
+                                    </div>
+                                </div>
+                                <lightning:select aura:id="select" name="select" label=""   value="{!v.selectedCreateAction}">
+                                    <option value="">Create record</option>
+                                    <option value="Immovables">Immovables</option>
+                                    <option value="Seller">Seller</option>
+                                </lightning:select>
+                            </div>
+                        </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-wrap slds-gutters  ">
+        <div class="slds-col slds-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12 slds-m-top_medium">
+            <article class="slds-card">
+                <div class="slds-card__body slds-m-around_medium">
+                    <div class="slds-form slds-form_stacked">
+                      <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                          <lightning:input type="search" label="Input address and press (global search)" name="search"  onchange="{!c.search}"  />
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </article>
+            <article class="slds-card">
+                <div class="slds-card__body slds-m-around_medium">
+                    <c:TypeList />
+                    <c:StatusList />
+                </div>
+            </article>
+        </div>
+        <div class="slds-col slds-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_9-of-12 slds-m-top_medium">
+                <article class="slds-card">
+                <div class="slds-card__body slds-m-around_medium ">
+                        <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal  slds-table_col-bordered">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Immovables Id">Id</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Type">Type</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Full address">Full address</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Total area">
+                                                Total area
+                                                <a onclick="{!c.sort}">
+                                                    <aura:if isTrue="{!v.sortArea}">
+                                                     	<lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="Sort arrow"/>
+                                                    	<aura:set attribute="else">
+                                                        	<lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="Sort arrow"/>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </a>
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Initial cost">Initial cost</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Seller">Seller</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Contact phone">Contact phone</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div  title="Actions">Actions</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <aura:iteration items="{!v.immovables}" var="immovablesItem">
+                                        <c:Immovables immovablesItem="{!immovablesItem}"/>
+                                    </aura:iteration>
+                                    
+                                </tbody>
+                            </table>
+                </div>
+            </article>   
+        </div>
+    </div>
+
+                
+               
+    <!-- Model Box Start -->    
+    <aura:if isTrue="{!v.isOpen}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModal}">
+                        X<span class="slds-assistive-text">Cancel</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium">New Immovables</h2>
+                </div>
+                
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-size--1-of-2 slds-large-size--1-of-2">
+                            <div class="slds-align--absolute-center">Select a Record Type</div>                            
+                        </div>
+                        <div class="slds-size--1-of-2 slds-large-size--1-of-2">
+                            <ui:inputSelect aura:id="selectid">
+                                <aura:iteration items="{!v.lstOfRecordType}" var="itemType">                            
+                                    <ui:inputSelectOption text="{!itemType}" label="{!itemType}"  />
+                                </aura:iteration>
+                            </ui:inputSelect>
+                        </div>&nbsp; &nbsp;
+                    </div>                   
+                </div>
+                
+                <div class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.closeModal}">Cancel</lightning:button>
+                    <lightning:button class="slds-button slds-button--brand" onclick="{!c.createRecordImmovables}">Next</lightning:button>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    
+    
+    
+     <!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->   
+    <aura:if isTrue="{!v.isOpenOffer}">
+      
+   <!--###### MODAL BOX Start From Here ######--> 
+      <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+        <div class="slds-modal__container">
+          <!-- ###### MODAL BOX HEADER Part Start From Here ######-->
+          <div class="slds-modal__header">
+            <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModelOf}">
+            X
+            <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 id="header99" class="slds-text-heading--medium">Proposals received</h2>
+          </div>
+          <!--###### MODAL BOX BODY Part Start From Here ######-->
+          <div class="slds-modal__content slds-p-around--medium">
+              <aura:if isTrue="{!v.offers.length!=0}">
+                  <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-max-medium-table_stacked-horizontal">
+                      <thead>
+                          <tr class="slds-text-title_caps">
+                              <th scope="col">
+                                  <div class="slds-truncate" title="Offer Id">Offer Id</div>
+                              </th>
+                              <th scope="col">
+                                  <div class="slds-truncate" title="Maximum price">Maximum price</div>
+                              </th>
+                              <th scope="col">
+                                  <div class="slds-truncate" title="Desired price">Desired price</div>
+                              </th>
+                              <th scope="col">
+                                  <div class="slds-truncate" title="Customer">Customer</div>
+                              </th>
+                              <th scope="col">
+                                  <div class="slds-truncate" title="Contact phone">Contact phone</div>
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <aura:iteration items="{!v.offers}" var="offerItem">
+                              <tr>
+                                  <th scope="row" data-label="Offer Id">
+                                      <div class="slds-truncate" title="">
+                                          <a href="{!'/one/one.app?#/sObject/'+ offerItem.Id + '/view'}">{!offerItem.Name}</a>
+                                      </div>
+                                  </th>
+                                  <td data-label="Maximum price">
+                                      <div class="slds-truncate" title="">{!offerItem.Maximum_price__c}</div>
+                                  </td>
+                                  <td data-label="Desired price">
+                                      <div class="slds-truncate" title="">{!offerItem.Desired_price__c}</div>
+                                  </td>
+                                  <td data-label="Customer">
+                                      <div class="slds-truncate" title="">
+                                          <a href="{!'/one/one.app?#/sObject/'+ offerItem.Customer__r.Id + '/view'}">
+                                              {!offerItem.Customer__r.First_name__c}&nbsp;  {!offerItem.Customer__r.Last_name__c}
+                                          </a>
+                                      </div>
+                                  </td>
+                                  <td data-label="Contact phone">
+                                      <div class="slds-truncate" title="">{!offerItem.Customer__r.Contact_phone__c}</div>
+                                  </td>
+                                  
+                              </tr>
+                          </aura:iteration>
+                      </tbody>
+                  </table>
+              </aura:if>
+          </div>
+          <!--###### MODAL BOX FOOTER Part Start From Here ######-->
+          <div class="slds-modal__footer">
+            <button class="slds-button slds-button--brand" onclick="{!c.CloseOf}">Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="slds-backdrop slds-backdrop--open"></div>
+      <!--###### MODAL BOX Part END Here ######-->
+    
+ </aura:if>
+    
+</aura:component>

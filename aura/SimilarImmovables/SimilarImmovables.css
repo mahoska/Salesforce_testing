@@ -1,0 +1,9 @@
+.THIS .not-sim {
+    color: #007add;
+    font-weight: bold;
+}
+
+.THIS .sim{
+    color: #706e6b;
+    font-weight: bold;
+}

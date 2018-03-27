@@ -79,6 +79,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>MittingSet</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>editRecordSimulationController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -479,6 +483,10 @@
     </tabVisibilities>
     <tabVisibilities>
         <tab>Immovables__c</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Meetings</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>

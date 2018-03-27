@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Times Of Day</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Times Of Day</value>
+    </caseValues>
+    <fields>
+        <label><!-- Begining --></label>
+        <name>Begining__c</name>
+    </fields>
+    <fields>
+        <label><!-- Ending --></label>
+        <name>Ending__c</name>
+    </fields>
+    <fields>
+        <label><!-- TimeSeparator --></label>
+        <name>TimeSeparator__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

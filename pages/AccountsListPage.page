@@ -10,7 +10,7 @@
             }
         }
     </script>
-    
+    <apex:pageMessages />
     <apex:form >
         <apex:pageBlock rendered="{!$ObjectType.Account.accessible}">
             <apex:pageBlockButtons >

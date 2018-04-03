@@ -25,6 +25,7 @@
     <tab>Broker__c</tab>
     <tab>ImmLocator</tab>
     <tab>Meetings</tab>
+    <tab>Accounts_List</tab>
     <uiType>Lightning</uiType>
     <utilityBar>Real_estate_agency_UtilityBar</utilityBar>
 </CustomApplication>

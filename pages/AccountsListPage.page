@@ -14,13 +14,13 @@
     <apex:form >
         <apex:pageBlock rendered="{!$ObjectType.Account.accessible}">
             <apex:pageBlockButtons >
-                <apex:commandButton action="{! showPopup}" value="New" rerender="addPopup" />
-                <apex:commandButton value="Delete Selected Accounts" action="{!deleteSelected}" />
+                <apex:commandButton action="{! showPopup}" value="New" rerender="addPopup" rendered="{! isCreateableAccount}"/>
+                <apex:commandButton value="Delete Selected Accounts" action="{!deleteSelected}" rendered="{! isDeletableAccount}"/>
             </apex:pageBlockButtons>
  
             <!--apex:pageblockSection title="All Accounts" -->
                 <apex:pageBlockTable value="{!wrapAccountList}" var="accWrap" id="wrapAccountListBlock" title="All Accounts" id="wrapAccountListBlock">
-                    <apex:column >
+                    <apex:column rendered="{! isDeletableAccount}">
                         <apex:facet name="header">
                             <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')"/>
                         </apex:facet>
@@ -29,17 +29,18 @@
                     <apex:column value="{!accWrap.acc.Name}" />
                     <apex:column value="{!accWrap.acc.Phone}" />
                     <apex:column >
-                        <apex:commandlink action="{!editAccount}">                          
+                        
+                        <apex:commandlink action="{!openPopupEditAccount}" rendered="{! isUpdateableAccount}">                          
                         	<apex:param name="accId" value="{!accWrap.acc.Id}"/>  
                        		<apex:commandbutton value="Edit" rerender="addPopup" />
                         </apex:commandlink><br/>
-                        <apex:commandlink action="{!addContact}">                          
+                        <apex:commandlink action="{!openPopupAddContact}" rendered="{! isCreateableContact}">                          
                         	<apex:param name="accIdForContact" value="{!accWrap.acc.Id}"/>  
                        		<apex:commandbutton value="Add Contact" rerender="addPopupContact" />
                     	</apex:commandlink>
                     </apex:column>
-                    <apex:column headerValue="Contacts">
-                    <apex:pageBlock rendered="{!accWrap.isContacts}">
+                    <apex:column headerValue="Contacts" rendered="{!accWrap.isContacts && isAccessibleContact}">
+                    <apex:pageBlock >
                         <apex:pageBlockTable value="{!accWrap.contactsList}" var="contact">
                           <apex:column value="{!contact.Name}"/>
                           <apex:column value="{!contact.Title}"/>
@@ -55,21 +56,20 @@
 		</apex:pageBlock>
     </apex:form>
     
-    
-    
-    
     <apex:pageBlock >
                 <apex:outputPanel id="addPopup">
                     <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
                     <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}">
-                        <apex:sectionHeader title="Visualforce Example" subtitle="Create/Edit an Account"/>
+                        <apex:sectionHeader title="Visualforce Example" subtitle="Create an Account" rendered="{!NOT(isEdit)}"/>
+                        <apex:sectionHeader title="Visualforce Example" subtitle="Edit an Account" rendered="{!isEdit}"/>
 						
                         <apex:form >
                             <apex:pageMessages /> <!-- this is where the error messages will appear -->
                             <apex:pageBlock title="Account Info">
                                 
                                 <apex:pageBlockButtons >
-                                    <apex:commandButton action="{!saveAccount}" value="Save/Edit" rerender="wrapAccountListBlock, addPopup" />
+                                    <apex:commandButton action="{!addAccount}" value="Save" rerender="wrapAccountListBlock, addPopup" rendered="{!NOT(isEdit)}"/>
+                                    <apex:commandButton action="{!editAccount}" value="Edit" rerender="wrapAccountListBlock, addPopup" rendered="{!isEdit}"/>
                                 </apex:pageBlockButtons>
                                 
                                 <apex:pageBlockSection showHeader="false" columns="2">
@@ -85,31 +85,31 @@
     </apex:pageBlock>
     
     <apex:pageBlock >
-                <apex:outputPanel id="addPopupContact">
-                    <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUpContact}"/>
-                    <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUpContact}">
-                        <apex:sectionHeader title="Visualforce Example" subtitle="Create a Contact"/>
-						
-                        <apex:form >
-                            <apex:pageMessages /> <!-- this is where the error messages will appear -->
-                            <apex:pageBlock title="Contact Info">
-                                
-                                <apex:pageBlockButtons >
-                                    <apex:commandButton action="{!saveContact}" value="Save" rerender="wrapAccountListBlock, addPopupContact" />
-                                </apex:pageBlockButtons>
-                                
-                                <apex:pageBlockSection showHeader="false" columns="2">
-                                    <apex:inputField value="{!cont.FirstName}" /><br/>
-                                    <apex:inputField value="{!cont.LastName}" /><br/>
-                                    <apex:inputField value="{!cont.Title}" /><br/>
-                                    <apex:inputField value="{!cont.Phone}" />
-                                </apex:pageBlockSection>
-                            </apex:pageBlock>
-                        </apex:form>
+        <apex:outputPanel id="addPopupContact">
+            <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUpContact}"/>
+            <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUpContact}">
+                <apex:sectionHeader title="Visualforce Example" subtitle="Create a Contact"/>
+                
+                <apex:form >
+                    <apex:pageMessages /> <!-- this is where the error messages will appear -->
+                    <apex:pageBlock title="Contact Info">
                         
-                        <apex:form ><apex:commandButton value="Close" action="{!closePopupContact}" rerender="addPopupContact"/></apex:form>
-                    </apex:outputPanel>
-                </apex:outputPanel>
+                        <apex:pageBlockButtons >
+                            <apex:commandButton action="{!saveContact}" value="Save" rerender="wrapAccountListBlock, addPopupContact" />
+                        </apex:pageBlockButtons>
+                        
+                        <apex:pageBlockSection showHeader="false" columns="2">
+                            <apex:inputField value="{!cont.FirstName}" /><br/>
+                            <apex:inputField value="{!cont.LastName}" /><br/>
+                            <apex:inputField value="{!cont.Title}" /><br/>
+                            <apex:inputField value="{!cont.Phone}" />
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:form>
+                
+                <apex:form ><apex:commandButton value="Close" action="{!closePopupContact}" rerender="addPopupContact"/></apex:form>
+            </apex:outputPanel>
+        </apex:outputPanel>
     </apex:pageBlock>
     
     

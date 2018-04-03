@@ -1,91 +1,69 @@
+/**
+ * Created by annaMahovskaya on 3/4/18.
+ */
 public without sharing class  CheckAccessRight {
+    private static Schema.DescribeSObjectResult wrapAccountList = Account.sObjectType.getDescribe();
+    private static String [] accountlistFields = new String [] {'name', 'phone'};
+    private static Map<String,Schema.SObjectField> accountlistFieldsMap = Schema.SObjectType.Account.fields.getMap();
+    
+    private static Schema.DescribeSObjectResult ContactListDescribe = Contact.sObjectType.getDescribe();
+    private static String [] contactslistFields = new String [] {'title','name','phone'};
+    private static Map<String,Schema.SObjectField> contactlistFieldsMap = Schema.SObjectType.Contact.fields.getMap();
 
+    /*сhecking account availability*/
     public static Boolean getwrapAccountListCRUDAccessAccessible(){
-        Schema.DescribeSObjectResult wrapAccountList = Account.sObjectType.getDescribe();
-        if(wrapAccountList.isAccessible()) {
-            return true;
-        } else {
-            return false;
-        }
+        return wrapAccountList.isAccessible();
     }
 
+   /*сhecking account filds availability*/
     public static Boolean getwrapAccountListFLSAccessAccessible(){
-        String [] accountlistFields = new String [] {'name', 'phone'};
-        Map<String,Schema.SObjectField> accountlistFieldsMap = Schema.SObjectType.Account.fields.getMap();
-        
         for (String fieldToCheck : accountlistFields) {
             if (!accountlistFieldsMap.get(fieldToCheck).getDescribe().isAccessible()) 
-                return false;
+                return  false;
         }
-    	return true;
+    	return  true;
     }
     
+    /*сhecking account on the availability of removal*/
     public static Boolean getwrapAccountListCRUDAccessDeletable(){
-        Schema.DescribeSObjectResult wrapAccountList = Account.sObjectType.getDescribe();
-        if(wrapAccountList.isDeletable()) {
-            return true;
-        } else {
-            return false;
-        }
+         return wrapAccountList.isDeletable();
     }
     
+    /*сhecking account on the availability of the addition operation*/
     public static Boolean getwrapAccountListCRUDAccessCreateable(){
-        Schema.DescribeSObjectResult wrapAccountList = Account.sObjectType.getDescribe();
-        if(wrapAccountList.isCreateable()) {
-            return true;
-        } else {
-            return false;
-        }
+        return wrapAccountList.isCreateable();
     }
 
+    /*check for the availability of entries in the fields of the account*/
     public static Boolean getwrapAccountListFLSAccessCreateable(){
-        String [] accountlistFields = new String [] {'name', 'phone'};
-            Map<String,Schema.SObjectField> accountlistFieldsMap = Schema.SObjectType.Account.fields.getMap();
-        
         for (String fieldToCheck : accountlistFields) {
             if (!accountlistFieldsMap.get(fieldToCheck).getDescribe().isCreateable()) 
-                return false;
+                return  false;
         }
-    	return true;
+    	return  true;
     }
     
+    /*сhecking account on the availability of the updating operation*/
     public static Boolean getwrapAccountListCRUDAccessUpdateable(){
-        Schema.DescribeSObjectResult wrapAccountList = Account.sObjectType.getDescribe();
-        if(wrapAccountList.isUpdateable()) {
-            return true;
-        } else {
-            return false;
-        }
+        return wrapAccountList.isUpdateable();
     }
 
-    public static Boolean getwrapAccountListFLSAccessUpdateable(){
-        String [] accountlistFields = new String [] {'name', 'phone'};
-        Map<String,Schema.SObjectField> accountlistFieldsMap = Schema.SObjectType.Account.fields.getMap();
-        
+    /*check for the availability of changes in account field values*/
+    public static Boolean getwrapAccountListFLSAccessUpdateable(){ 
         for (String fieldToCheck : accountlistFields) {
             if (!accountlistFieldsMap.get(fieldToCheck).getDescribe().isUpdateable()) 
                 return false;
         }
-    	return true;
+        return true;
     }
    
-   //Contact object Accessible
+   /*сhecking contact availability*/
    public static Boolean getwrapContactListCRUDAccessAccessible(){
-       Schema.DescribeSObjectResult ContactListDescribe = Contact.sObjectType.getDescribe();
-        if(ContactListDescribe.isAccessible()) {
-            return true;
-        } else {
-            return false;
-        } 
+        return ContactListDescribe.isAccessible();
     }
 
-    //Contact fields Accessible
+   /*сhecking contact filds availability*/
     public static Boolean getwrapContactListFLSAccessAccessible(){       
-        String [] contactslistFields = new String [] {'title','name','phone'};
-            Boolean contactslistFieldsAccessStauts;
-        
-        Map<String,Schema.SObjectField> contactlistFieldsMap = Schema.SObjectType.Contact.fields.getMap();
-        
         for (String fieldToCheck : contactslistFields) {
             if (!contactlistFieldsMap.get(fieldToCheck).getDescribe().isAccessible()) {
                 return false;
@@ -94,22 +72,15 @@ public without sharing class  CheckAccessRight {
         return true;
     }
 
-    //Contact object Createable
+    /*сhecking contact on the availability of the addition operation*/
    public static Boolean getwrapContactListCRUDAccessCreateable(){
-       Schema.DescribeSObjectResult ContactListDescribe = Contact.sObjectType.getDescribe();
-        if(ContactListDescribe.isCreateable()) {
-            return true;
-        } else {
-            return false;
-        } 
+        return ContactListDescribe.isCreateable();
     }
 
-    //Contact fields Createable
-    public static Boolean getwrapContactListFLSAccessCreateable(){       
-        String [] contactslistFields = new String [] {'title','firstname','lastname','phone'};
-            Boolean contactslistFieldsAccessStauts;
-        
-        Map<String,Schema.SObjectField> contactlistFieldsMap = Schema.SObjectType.Contact.fields.getMap();
+     /*check for the availability of entries in the fields of the contact*/
+    public static Boolean getwrapContactListFLSAccessCreateable(){ 
+        contactslistFields = new String [] {'title','firstname','lastname','phone'};
+        contactlistFieldsMap = Schema.SObjectType.Contact.fields.getMap();
         
         for (String fieldToCheck : contactslistFields) {
             if (!contactlistFieldsMap.get(fieldToCheck).getDescribe().isCreateable()) {

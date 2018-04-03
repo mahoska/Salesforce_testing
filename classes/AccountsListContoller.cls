@@ -1,24 +1,67 @@
+/**
+ * Created by annaMahovskaya on 3/4/18.
+ */
 public with sharing class AccountsListContoller {
-    public List<wrapAccount> wrapAccountList {get; set;}
-    public List<Account> selectedAccounts{get;set;}
-    public boolean displayPopup {get; set;}
-    public boolean displayPopUpContact{get;set;}
-    public Boolean isEdit {set; get{ if(isEdit==null){ isEdit=false;  }return isEdit;}}
+    public List<WrapAccount> wrapAccountList {get; set;}
+    public List<Account> selectedAccounts{get; set;}
+    public Boolean displayPopup {get; set;}
+    public Boolean displayPopUpContact{get; set;}
+    public Boolean isEdit {
+        set; 
+        get{ 
+            if(isEdit == null){ 
+                isEdit = false;  
+            }
+            return isEdit;
+        }
+    }
     
+    //account security variable
+    public  Boolean isAccessibleAccount{get;set;}
+    public  Boolean isDeletableAccount{get;set;}
+    public  Boolean isCreateableAccount{get;set;}
+    public  Boolean isUpdateableAccount{get;set;}
+    //contact security variable
+    public  Boolean isAccessibleContact{get;set;}
+    public  Boolean isCreateableContact{get;set;}
+    
+     /**
+       * Public construct initialize security settings 
+       * and call the method of generating a list of accounts and their contacts
+    */ 
     public AccountsListContoller(){
-        if(wrapAccountList == null && CheckAccessRight.getwrapAccountListCRUDAccessAccessible() && CheckAccessRight.getwrapAccountListFLSAccessAccessible() && true) {
-            wrapAccountList = new List<wrapAccount>();
-            for(Account a: [SELECT Id, Name, Phone FROM Account LIMIT 1000]) {
-                wrapAccountList.add(new wrapAccount(a));
-                //system.debug(wrapAccountList);
+        isAccessibleAccount = CheckAccessRight.getwrapAccountListCRUDAccessAccessible() && CheckAccessRight.getwrapAccountListFLSAccessAccessible();
+        isDeletableAccount = CheckAccessRight.getwrapAccountListCRUDAccessDeletable();
+        isCreateableAccount = CheckAccessRight.getwrapAccountListCRUDAccessCreateable() && CheckAccessRight.getwrapAccountListFLSAccessCreateable();
+        isUpdateableAccount = CheckAccessRight.getwrapAccountListCRUDAccessUpdateable() && CheckAccessRight.getwrapAccountListFLSAccessUpdateable();
+        isAccessibleContact = CheckAccessRight.getwrapContactListCRUDAccessAccessible() && CheckAccessRight.getwrapContactListFLSAccessAccessible();
+        isCreateableContact = CheckAccessRight.getwrapContactListCRUDAccessCreateable() && CheckAccessRight.getwrapContactListFLSAccessCreateable();
+        
+        getwrapAccountList();
+    }
+    
+    /**
+       * Public void method 
+       * reading the accounts from the database and wrapping them
+    */ 
+    public void getwrapAccountList(){
+        if(wrapAccountList == null && isAccessibleAccount && true) {
+            wrapAccountList = new List<WrapAccount>();
+            for(Account a: [SELECT Id, Name, Phone, (SELECT Id, Name, Title, Phone FROM Contacts) contacts FROM Account LIMIT 1000]) {
+                wrapAccountList.add(new WrapAccount(a,  a.contacts));
             }
         }else{
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'You have not permission for view account'));     
         }
-    } 
+    }
     
+    /**
+       * Public void method 
+       * removes selected accounts from the database 
+       * and from the list of accounts displayed on the page
+    */ 
     public void deleteSelected() {
-        if(!CheckAccessRight.getwrapAccountListCRUDAccessDeletable()){
+        if(!isDeletableAccount){
             //object is not deletable
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'You have not permission for delete account'));
             return;
@@ -26,7 +69,7 @@ public with sharing class AccountsListContoller {
         
         selectedAccounts = new List<Account>();
         
-        for(wrapAccount wrapAccountObj : wrapAccountList) {
+        for(WrapAccount wrapAccountObj : wrapAccountList) {
             if(wrapAccountObj.selected == true) {
                 selectedAccounts.add(wrapAccountObj.acc);
             }
@@ -39,30 +82,23 @@ public with sharing class AccountsListContoller {
                     i--;
                 }
             }
-            //System.debug(wrapAccountList);
         } catch (DmlException e) {
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Error delete operation')); 
-            //System.debug('Error delete operation');
         }
     }
     
-    public void saveAccount() {
-        if(CheckAccessRight.getwrapAccountListCRUDAccessCreateable() && CheckAccessRight.getwrapAccountListFLSAccessCreateable() && true){
+    /**
+       * Public void method 
+       * a new account entry in the database and a list of displayed accounts
+    */ 
+    public void addAccount() {
+        if(isCreateableAccount && true){
             try {
                 if (acct != null){
-                    if(!isEdit){
-                        insert acct; // inserts the new record into the database
-                        wrapAccountList.add(new wrapAccount(acct));
-                    }else{
-                        update acct;
-                        for(Integer i=0; i<wrapAccountList.size(); i++) {
-                            if(wrapAccountList[i].acc.Id == acct.Id) {
-                                wrapAccountList[i].acc = acct;
-                            }
-                        }
-                        isEdit = false;
-                    }
-                    acct = null;  
+                    insert acct; // inserts the new record into the database
+                    wrapAccountList.add(new WrapAccount(acct));
+                    acct = null; 
+                    //close popup 
                     displayPopup = false;      
                 }  
             } catch (DMLException e) {
@@ -71,17 +107,44 @@ public with sharing class AccountsListContoller {
         }else{
             //object is not insert
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'You have not permission for insert account')); 
+        }  
+    }
+    
+     /**
+       * Public void method 
+       * update account in database and list of displayed accounts
+    */ 
+    public void editAccount(){
+        try {
+            if (acct != null && isEdit){
+                update acct;
+                for(Integer i=0; i<wrapAccountList.size(); i++) {
+                    if(wrapAccountList[i].acc.Id == acct.Id) {
+                        wrapAccountList[i].acc = acct;
+                    }
+                }
+                //return settings save-popup
+                isEdit = false;
+            }
+            acct = null;  
+            //close popup
+            displayPopup = false;                   
+        } catch (DMLException e) {
+            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Error updating new account.')); 
         }
     }
     
-    public void editAccount() {
-        if(CheckAccessRight.getwrapAccountListCRUDAccessCreateable() && CheckAccessRight.getwrapAccountListFLSAccessCreateable() && true){
+     /**
+       * Public void method 
+       * сall the account edit window and fill it with data for editing
+    */ 
+    public void openPopupEditAccount() {
+        if(isUpdateableAccount && true){
             Id editAccountId = ApexPages.currentPage().getParameters().get('accId');
             try {
                 acct = [SELECT Name, Phone FROM Account WHERE Id =: editAccountId];   
                 displayPopup = true;   
                 isEdit = true;
-                
             } catch(Exception e) {
                 System.debug('An unexpected error has occurred: ' + e.getMessage());
             }
@@ -91,15 +154,22 @@ public with sharing class AccountsListContoller {
         }
     }
     
-    
-    public void addContact(){
+    /**
+       * Public void method 
+       * open the window for adding a contact and transfer it to the Id account
+    */ 
+    public void openPopupAddContact(){
         displayPopUpContact = true;    
         Id accountId = ApexPages.currentPage().getParameters().get('accIdForContact');
         cont.accountId = accountId;
     }
     
+     /**
+       * Public void method 
+       * save a new contact to the database and update the display list
+    */ 
     public void saveContact(){
-        if(CheckAccessRight.getwrapContactListCRUDAccessCreateable() && CheckAccessRight.getwrapContactListFLSAccessCreateable() && true){
+        if(isCreateableContact && true){
             try {
                 if (cont != null){
                     insert cont;
@@ -125,22 +195,24 @@ public with sharing class AccountsListContoller {
     }
     
     // This is our wrapper/container class contains object Account(with Contacts) and a Boolean value
-    public class wrapAccount {
+    public class WrapAccount {
         public Account acc {get; set;}
         public Boolean selected {get; set;}
         public List<Contact> contactsList {get; set;}
         public Boolean isContacts{get; set;}
         
         
-        public wrapAccount(Account a) {
+        public WrapAccount(Account a,  List<Contact>  contacts) {
+            acc = a;
+            selected = false;
+            contactsList = new List<Contact>(contacts);
+            isContacts = contactsList.size() !=0 ? true : false;
+        }
+        
+        public WrapAccount(Account a){
             acc = a;
             selected = false;
             contactsList = new List<Contact>();
-            if(CheckAccessRight.getwrapContactListCRUDAccessAccessible() && CheckAccessRight.getwrapContactListFLSAccessAccessible() && true){
-                contactsList = [SELECT Id, Name, Phone, Title FROM Contact WHERE accountId =: a.Id LIMIT 1000];
-            }else{
-                ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'You have not permission for view contacts'));     
-            }
             isContacts = contactsList.size() !=0 ? true : false;
         }
     }
@@ -166,13 +238,16 @@ public with sharing class AccountsListContoller {
     
     public void closePopup() {        
         displayPopup = false;    
-    }     
+    } 
+    
     public void showPopup() {        
         displayPopup = true;    
-    }    
+    }  
+    
     public void closePopupContact() {        
         displayPopUpContact = false;    
-    }     
+    }  
+    
     public void showPopupContact() {        
         displayPopUpContact = true;    
     }    
